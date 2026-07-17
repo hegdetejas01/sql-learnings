@@ -1,0 +1,258 @@
+"Importance of Data"
+1. Data is the new OIL
+
+    3 Revolutions:
+    * Computers
+    * Internet
+    ** AI - Requires Data - Industrial Revolutions 4 and 5
+
+2. Datas stored in DBs which requires SQL
+
+
+
+What is a DB?
+It is the collection of logically related data which is stored and can be retrived in any form
+
+
+Usage of DB?
+1. Data Storage - storing large amount of structured data
+2. Data Analysis - data helps to generate insights
+3. Record Keeping - kepp track of important records
+4. Web Application - DBs can be joined in conjuction with mobile/web application
+
+
+4 Operations in DB
+1. Create
+2. Retrive
+3. Update
+4. Delete
+
+
+*** Properties of IDEAL DB ***
+1. Integrity 
+    a. Accuracy
+    b. Consistancy
+
+2. Availability
+* highly available with zero downtime
+
+3. Security
+
+4. DB should be Independent of Application
+* multiple platform should have same database
+* should be understood by other programming languages also
+
+5. Concurrancy
+* parallel access to information
+
+
+*** Types Of Databases ***
+1. Relational DB
+2. NoSQL DB
+3. Column DB
+4. Graph DB
+5. Key-Value DB
+
+
+### Relational database ###
+    * Also called as SQL DB
+    * These DB use a relational model to organise data into table with rows and column 
+    * Data are stored in tables
+    * Tables are often related
+    * It is a row based DB because, one each informationis stored in the form of row
+    * Usually used for websites/apps
+
+    Eg: MySQL, Postgre, Oracle, SQL Server, Microsoft access
+
+
+### NoSQL database ###
+    * Not only SQL
+    * These DB are used to handle large amount of unstructured, semi-structured data like photos, videos, pdfs etc
+    * such data are usually present in Social Media Application
+
+    Eg: MongoDB
+
+
+### Column database ###
+    * These DBs stores data in columns unlike relational DBs which stores row wise. 
+    * It is helpful for data warehousing and analytical application
+    * It is comparitively fast
+    * Usually used for analysis
+
+    Eg: Amazon Redshift, Google Query
+
+    Eg:
+        one table for all student names
+        one table for all student branch
+        one table for all student cgpa
+
+        how is it stored in memory?
+        -   name1, name2, ... , branch1, branch2, ... , cpga1, cgpa2, ...
+
+
+### Graph database ###
+    * Databases are used to store and query graph-structured data
+    * Usually used in social media, networking kind of applications, recommendation system etc
+    * That is, it helps to store complex relationship data
+
+    Eg: Neo4j, Amazon Neptune
+
+
+### Key-Value database ###
+    * They store data in key - value pairs
+    * Useful in caching and simple data storing application
+
+    Eg: Redis, Amazon DynamoDB
+
+
+
+
+#########################################################################################
+
+                                Relational Databases
+
+Terminologies
+    1. Table is called as Relation 
+    2. Columns are called as Attributes
+    3. Rows are called as Tuple
+    4. Cardinality of Relation - Total number of rows
+    5. Degree of Relation - Total number of Attributes/columns
+    6. Missing Value is called NULL
+    7. Domain - What type of datatype fits in the a particular column?
+        eg: name column : any string
+
+#########################################################################################
+
+
+
+
+
+
+What is DBMS ?
+    * It is a software system
+    * Provides tools for managing data in a DB
+    * It is an intermediary between an (application that access the data) and (DB)
+
+    Remember : 
+    Applications <--> DBMS (which works on DB) <--> Operating System
+
+    When DBs store data, it is stored in hardware (HDD, SSD) and hence OS is required to access/modify the data in DB
+
+
+    Functions of DBMS
+    1. Data Management : CRUD
+    2. Integrity : Maintaining accuracy of data
+    3. Concurrancy : Simultaneous data access
+    4. Transaction : Modification to DB should be either complete/successful or must not happen at all
+        * rollbacking data modification if the transaction fails
+    5. Security : Authorised access
+    6. Utilities : import/export, user management, backup etc
+
+
+
+
+### KEYS ###
+    * A key is an attribute/column or set of attribute, that uniquiely identifies a Row in the table
+    Eg: 
+    In student table with columns - roll num, name, branch, email,
+    EMAIL and ROLL NUM can become the KEY
+
+    * It plays crucial roles in ensuring the integrity and reliability of the DB
+
+
+    # Types of Keys
+
+    1. Super Key
+        * It is a combination of columns that uniquiely identifies any row within RDBMS table
+
+        Eg: 
+        In student table with columns - roll num, name, branch, email,
+        All the following (uniquiely identifies a row) becomes Super Key
+            - roll num
+            - email
+            - roll num + name
+            - roll num + branch
+            - roll num + email
+            - email + branch
+            - email + name
+            - name + branch + email
+            - roll num + branch + name
+            - roll num + name + email
+            - roll num + branch + email
+            - all 4 columns
+
+    2. Candidate Key
+        * A candidate key is a minimal Super key, meaning it has no redundant attributes.
+        * It is the smallest set of attributes that can be used to uniquely identify a row in the table
+
+        Eg: From the above super keys, only "roll num" and "email" are the candidate keys, because rest all keys will be redundant since they are a combination of roll num or email or both
+
+    3. Primary Key
+        * Becomes the main key of the table
+        * It is the unique identifier for a row
+        * It can't be NULL
+        * One table contains ONLY ONE PRIMARY KEY
+        * It can't be duplicate
+
+        Mandatory criteria - not a null, can't be duplicate
+        Good to have - numerical, small, constant
+
+        Eg: "Roll Num" becomes the Primary Key to uniquely identify a row
+
+    4. Alternate Key
+        * It is a candidate key which is not a Primary Key
+        * Alternate key = candidate key - primary key
+        Eg: email
+
+    5. Composite Key
+        * It is a primary key made of TWO or MORE attribute
+
+    6. Surrogate Key
+        * Table with columns:  name, branch, cgpa 
+            - none of the column or combination of columns can't become Primary Key
+            - Adding a new column: student_id which acts as a primary key
+            - student_id is the surrogate key
+
+    7. Foreign Key
+        * It is a primary key from one table used to establish the relationship with other table
+        * Primary key of one table is called as foreign key in another table when used in the second table
+
+
+
+
+### Cardinality of the Relationships ###
+    * It refers to the number of occurrences of an entity in a relationship with another entity
+    * Entity is something which can be represented in terms of Table - student, restraunt etc
+    * Cardinality defines the number of instances of one entity that can be associated with a single instance of the related entity
+
+    It is of three types 
+    1. One to One relationship
+        * Two entities has one to one relationship
+        eg: person and a driving relationship - each person has only one DL, one DL belongs to only one person
+
+        ** Only one table is required to store the entire info **
+
+    2. One to Many relationship
+        * student and branch - a student belongs to only branch, but a branch contains many students
+
+        ** Two table is required to store the entire info **
+
+    3. Many to Many relationship
+        * student and courses - one student can enroll in multiple courses and a single course can be enrolled by multiple students
+        * restraunt and order
+        * restraunt and menu
+
+        ** This requires three tables to store the entire data **
+
+
+
+
+
+### Drawbacks of DB ###
+1. Complexity - setting up and managing DB is complex especially for large application
+2. Cost - cost is vey high
+3. Scalability - as data increases, db becomes difficult to manage leading to performance issues
+4. Data Integrity
+5. Security - cyber attacks increasing
+6. Data Migration - moving from one DB to another OR upgrading to a new DB
+7. Flexibility - the structure is rigid making it difficult to adapt to changing requirment
