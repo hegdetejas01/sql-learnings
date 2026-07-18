@@ -302,7 +302,7 @@ Type of SQL Commands
     Normalization: 
         * It reduces data redundancy and ensures data consistancy by organising data into saperate tables
 
-        
+
 
 ########### CONSTRAINTS ###########
 
@@ -313,3 +313,33 @@ Type of SQL Commands
 5. CHECK            # applies check on a particular columns. Eg: age>9
 6. DEFAULT          # assigning a default value. Eg: registration date: today's date
 7. FOREIGN KEY
+
+
+
+### Referential Actions - If 2 tables are related via forign key, what happens to one table upon deleting or updating a key in another table.
+
+It is of 4 types
+    1. Restrict - default behaviour
+    2. Cascade
+    3. Set null
+    4. Set default
+
+
+Consider the following schema:
+* Two Table - customers and orders
+* Customers Table -> customer_id(pk), name, email
+* Orders Table -> order_id(pk), customer_id(foreignkey), date
+
+
+1. Restrict : 
+    * if there is customer with id: 4 and if his id is also present in orders, then the DBMS doesn't allow to delete/modify that customer(with id: 4) from the customer table.
+    * This is the default behaviour
+
+2. Cascade : 
+    * if there is customer with id: 4 and if his id is also present in orders, then any changes will be reflected in the orders table also. It that customer is deleted from the customer table, then all the entries related to his customer id will also be deleted from the orders table.
+    
+3. Set null : 
+    * upon deleting that customer in the customer table, the foreignkey in the orders table will be set to null
+
+4. Set default: 
+    * upon deleting that customer in the customer table, the foreignkey in the orders table will be set to the default value

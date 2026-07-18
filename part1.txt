@@ -26,6 +26,10 @@ DDL Commands for Tables
     Drop Table - Deleting a table
         DROP TABLE IF EXISTS students
 
+    Alter Table - 
+        * Helps to modify the structure of existing table 
+        * Eg: add columns, delete columns, modify columns
+
 
 
 ############# CONSTRAINTS #############
@@ -141,3 +145,154 @@ Eg: CONSTRAINT students_email_unique UNIQUE (email)
         email VARCHAR(255) NOT NULL UNIQUE,
         password VARCHAR(255) NOT NULL
     )
+
+
+5. CHECK                # It applies conditions
+# checks if the age of teacher is between 25 and 60
+
+    CREATE TABLE teachers(
+        id INT PRIMARY KEY,
+        name VARCHAR(50) NOT NULL,
+        age INT CHECK (age>25 AND age<60)
+    )
+
+            ## OR ##
+
+    CREATE TABLE teachers( 
+        id INT PRIMARY KEY, 
+        name VARCHAR(50) NOT NULL, 
+        age INT, 
+        
+        CONSTRAINT teachers_age_check CHECK (age>25 AND age<60) 
+    )
+
+
+
+6. DEFAULT
+* Booking date will be set to "current time and current date" by default if not provided
+
+    CREATE TABLE ticket(
+        ticket_id INT PRIMARY KEY,
+        name VARCHAR(50) NOT NULL,
+        booking_date DATETIME DEFAULT CURRENT_TIMESTAMP
+    )
+
+
+7. FOREIGN KEY
+* Primary key of one table present in another table for establishing a relationship, it is called as a foreign key
+* Two Table - customers and orders
+* Customers Table -> customer_id(pk), name, email
+* Orders Table -> order_id(pk), customer_id(foreignkey), date
+
+    CREATE TABLE customers( 
+        cid INT PRIMARY KEY AUTO_INCREMENT, 
+        name VARCHAR(50) NOT NULL, 
+        email VARCHAR(50) NOT NULL UNIQUE 
+    )
+
+
+    CREATE TABLE orders( 
+        order_id INT PRIMARY KEY, 
+        cid INT NOT NULL,
+        order_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        
+        CONSTRAINT orders_cid_fk FOREIGN KEY (cid) REFERENCES customers(cid)
+    )
+
+
+    * "CONSTRAINT orders_cid_fk FOREIGN KEY (cid) REFERENCES customers(cid)" - means that i want my cid of orders table to be my foreign key, which referes/connects to cid of customers TABLE
+    * upon doing this, the DBMS doesn't allow me to delete the customers table, because it is used in orders table
+    
+
+### Referential Actions - If 2 tables are related via forign key, what happens to one table upon deleting or updating a key in another table.
+
+It is of 4 types
+    1. Restrict - default behaviour (Above Code)
+    2. Cascade
+    3. Set null
+    4. Set default
+
+
+
+Restrict : 
+    * if there is customer with id: 4 and if his id is also present in orders, then the DBMS doesn't allow to delete/modify that customer(with id: 4) from the customer table.
+    * This is the default behaviour
+
+    CREATE TABLE customers( 
+        cid INT PRIMARY KEY AUTO_INCREMENT, 
+        name VARCHAR(50) NOT NULL, 
+        email VARCHAR(50) NOT NULL UNIQUE 
+    )
+
+
+    CREATE TABLE orders( 
+        order_id INT PRIMARY KEY, 
+        cid INT NOT NULL,
+        order_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        
+        CONSTRAINT orders_cid_fk FOREIGN KEY (cid) REFERENCES customers(cid)
+    )
+
+
+Cascade : 
+    * if there is customer with id: 4 and if his id is also present in orders, then any changes will be reflected in the orders table also. It that customer is deleted from the customer table, then all the entries related to his customer id will also be deleted from the orders table.
+
+    CREATE TABLE customers( 
+        customer_id INT PRIMARY KEY AUTO_INCREMENT, 
+        name VARCHAR(50) NOT NULL
+    )
+
+    CREATE TABLE orders( 
+        order_id INT PRIMARY KEY AUTO_INCREMENT, 
+        cid INT NOT NULL, 
+        order_date DATETIME NOT NULL DEFAULT CURRENT_DATE, 
+        
+        CONSTRAINT orders_cid_fk FOREIGN KEY (cid) REFERENCES customers(customer_id) 
+        ON DELETE CASCADE 
+        ON UPDATE CASCADE 
+    )
+
+
+
+Alter Table - 
+    * Helps to modify the structure of existing table 
+    * Eg: add columns, delete columns, modify columns
+
+    Adding a new column email to the Customers table
+        ALTER TABLE customers ADD COLUMN email VARCHAR(255) NOT NULL
+
+    Adding a new column at a specific position - adding column surname after name column
+        ALTER TABLE customers ADD COLUMN surname VARCHAR(50) NOT NULL AFTER name
+
+    Adding a new column at a specific position - adding column surname before name column
+        ALTER TABLE customers ADD COLUMN surname VARCHAR(50) NOT NULL BEFORE name
+
+    Adding multiple columns at once - adding pan_num after surname, and joining date at last
+        ALTER TABLE customers
+        ADD COLUMN pan_num VARCHAR(255) AFTER surname,
+        ADD COLUMN joining_date DATE NOT NULL DEFAULT CURRENT_TIMESTAMP
+
+
+    Deleting column - pan_num
+        ALTER TABLE customers DROP COLUMN pan_num
+
+    Deleting multiple columns at once - joining_date and email
+        ALTER TABLE customers
+        DROP COLUMN email,
+        DROP COLUMN joining_date
+
+
+    Modifying column - making surname integer
+        ALTER TABLE customers MODIFY COLUMN surname INTEGER
+
+    Modifying multiple columns at once - name and surname
+        ALTER TABLE customers 
+        MODIFY COLUMN name VARCHAR(30),
+        MODIFY COLUMN surname VARCHAR(15)
+
+
+
+    Create, Delete a Constraint (Can't modify any constraint. You have to delete and then add a new one)
+        ALTER TABLE customers ADD COLUMN age INT NOT NULL
+        ALTER TABLE customers ADD CONSTRAINT customers_age_check CHECK (age<18) 
+        ALTER TABLE customers DROP CONSTRAINT customers_age_check

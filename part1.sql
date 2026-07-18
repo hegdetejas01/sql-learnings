@@ -75,3 +75,59 @@ CREATE TABLE students(
     CONSTRAINT students_id_name_pk PRIMARY KEY (id, name)
 )
 
+CREATE TABLE students(
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL
+)
+
+CREATE TABLE teachers(
+    id INT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    age INT CHECK (age>25 AND age<60)
+)
+
+CREATE TABLE teachers( 
+    id INT PRIMARY KEY, 
+    name VARCHAR(50) NOT NULL, 
+    age INT, 
+    
+    CONSTRAINT teachers_age_check CHECK (age>25 AND age<60) 
+)
+
+CREATE TABLE ticket(
+    ticket_id INT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    booking_date DATETIME DEFAULT CURRENT_TIMESTAMP
+)
+
+CREATE TABLE customers( 
+    cid INT PRIMARY KEY AUTO_INCREMENT, 
+    name VARCHAR(50) NOT NULL, 
+    email VARCHAR(50) NOT NULL UNIQUE 
+)
+
+
+CREATE TABLE orders( 
+    order_id INT PRIMARY KEY, 
+    cid INT NOT NULL,
+    order_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    
+    CONSTRAINT orders_cid_fk FOREIGN KEY (cid) REFERENCES customers(cid)
+)
+
+    CREATE TABLE customers( 
+    customer_id INT PRIMARY KEY AUTO_INCREMENT, 
+    name VARCHAR(50) NOT NULL
+)
+
+CREATE TABLE orders( 
+    order_id INT PRIMARY KEY AUTO_INCREMENT, 
+    cid INT NOT NULL, 
+    order_date DATETIME NOT NULL DEFAULT CURRENT_DATE, 
+    
+    CONSTRAINT orders_cid_fk FOREIGN KEY (cid) REFERENCES customers(customer_id) 
+    ON DELETE CASCADE 
+    ON UPDATE CASCADE 
+)
