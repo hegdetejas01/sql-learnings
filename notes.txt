@@ -246,8 +246,6 @@ What is DBMS ?
 
 
 
-
-
 ### Drawbacks of DB ###
 1. Complexity - setting up and managing DB is complex especially for large application
 2. Cost - cost is vey high
@@ -256,3 +254,62 @@ What is DBMS ?
 5. Security - cyber attacks increasing
 6. Data Migration - moving from one DB to another OR upgrading to a new DB
 7. Flexibility - the structure is rigid making it difficult to adapt to changing requirment
+
+
+
+
+# Hirarchy of Relational DB Model
+    Database Server --> DBMS --> DB --> Tables --> Rows and Columns
+
+
+
+What is SQL?
+    * structured query language
+    * used to manage and manipulate data in relational DB
+    * CRUD operation 
+    * used for data management
+
+Type of SQL Commands
+    1. Data Definition Language
+        - creating and deleting databases or tables
+        * Commands: Create, Alter, Drop, Truncate
+
+    2. Data Manipulation Language 
+        - CRUD
+        * Commands: Insert (c), Update (u), Delete (d), Select (r)
+
+    3. Data Control Language 
+        Commands: Grant, Revoke
+
+    4. Transaction Control Language
+        Commands: Commit, Rollback
+
+
+
+
+### Data Integrity ###
+    * It referes to accurancy, completeness, consistancy
+    * It is a measure of reliability and trustworthyness
+    * It ensures data in DB is protected from errors, corruption and unauthorised changes
+
+    Constraints:
+        * These are the rules that must be met for data to be inserted, updated, deleted from DB tables.
+        * It prevents data from becoming inconsistancy or corrupted.
+
+    Transaction: 
+        * It is a sequence of DB operations that are treated as a single unit of work.
+
+    Normalization: 
+        * It reduces data redundancy and ensures data consistancy by organising data into saperate tables
+
+        
+
+########### CONSTRAINTS ###########
+
+1. NOT NULL
+2. UNIQUE           # that column data should be unique
+3. PRIMARY KEY      # not null + unique 
+4. AUTO INCREMENT
+5. CHECK            # applies check on a particular columns. Eg: age>9
+6. DEFAULT          # assigning a default value. Eg: registration date: today's date
+7. FOREIGN KEY
