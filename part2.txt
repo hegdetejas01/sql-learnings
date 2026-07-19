@@ -1,4 +1,6 @@
-### DML
+#####################################################################################################
+                                DATA MANIPULATION LANGUAGE 
+#####################################################################################################
 
 
 CREATE DATABASE sql_learning
@@ -182,8 +184,74 @@ changing values based on some criteria
 
 
 
+#####################################################################################################
+                                        SQL FUNCTIONS 
+#####################################################################################################
+
+### Aggregate Functions
+
+1. Max and Min
+    # Find the phone which is costly and cheap
+    SELECT model, MAX(price) FROM sql_learning.smartphones
+    SELECT model, MIN(price) FROM sql_learning.smartphones
+
+    # costliest samsung phone
+    SELECT model, MAX(price) FROM sql_learning.smartphones WHERE brand_name='samsung'
+
+2. Avg 
+    # Avg rating of apple phones
+    SELECT AVG(rating) FROM sql_learning.smartphones WHERE brand_name='apple'
+
+3. Sum - applies sum on entire column
+    # SUM of prices of apple phones
+    SELECT SUM(price) FROM sql_learning.smartphones WHERE brand_name='apple'
+
+4. Count - counts on the given condition 
+    # Get the number of samsung phones in the data
+    SELECT COUNT(*) FROM sql_learning.smartphones WHERE brand_name='samsung'
+
+5. Count Distinct
+    # Get the total number of unique brands
+    SELECT COUNT(DISTINCT(brand_name)) FROM sql_learning.smartphones
+
+    # Get the total number of unique processor brands
+    SELECT COUNT(DISTINCT(processor_brand)) FROM sql_learning.smartphones
+
+6. Std deviation and Varience
+    # std on screen size
+    SELECT STD(screen_size) FROM sql_learning.smartphones
+
+    # variance on screen size
+    SELECT VARIANCE(screen_size) FROM sql_learning.smartphones
+
+
+
+### Scalar Functions
+
+1. ABS : converts -ve to +ve and keeps +ve as it is
+    # subtract price from 50000 and apply ABS
+    SELECT ABS(50000 - price) as 'diff' FROM sql_learning.smartphones
+
+2. ROUND : 
+    # PPI Roundoff
+    SELECT model, 
+    ROUND(SQRT(resolution_width*resolution_width + resolution_height*resolution_height)/screen_size) AS 'PPI' FROM sql_learning.smartphones
+
+    # PPI Roundoff for 2 decimal place
+    SELECT model, 
+    ROUND(SQRT(resolution_width*resolution_width + resolution_height*resolution_height)/screen_size, 2) AS 'PPI' 
+    FROM sql_learning.smartphones
+
+3. CEIL and FLOOR
+    SELECT CEIL(screen_size) FROM sql_learning.smartphones
+    SELECT FLOOR(screen_size) FROM sql_learning.smartphones
 
 
 
 
 
+SELECT AVG(battery_capacity) , AVG(primary_camera_rear) FROM sql_learning.smartphones WHERE price>100000
+
+SELECT AVG(internal_memory) FROM sql_learning.smartphones WHERE refresh_rate>=120 AND (num_front_cameras * primary_camera_front) > 20
+
+SELECT COUNT(*) FROM sql_learning.smartphones WHERE has_5g = 'TRUE'

@@ -390,3 +390,17 @@ ORDER BY
         Here, first FROM will execute - the entire employee table will be loaded to memory
         Next, WHERE will execute - only those rows where salary > 40000 will be kept
         At Last, SELECT will get executed - only name column will be fetched
+
+
+
+#####################################################################################################
+                                        SQL FUNCTIONS 
+#####################################################################################################
+
+There Are Two Types Of Functions:
+    1. Built in
+        It is of two types
+        a. scalar functions - round, ceil, SQRT etc
+        b. aggregate functions - sum, avg, min, max, std deviation, variance etc
+        
+    2. User Defined
