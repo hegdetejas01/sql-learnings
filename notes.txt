@@ -343,3 +343,50 @@ Consider the following schema:
 
 4. Set default: 
     * upon deleting that customer in the customer table, the foreignkey in the orders table will be set to the default value
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#####################################################################################################
+                                Data Manipulation Language 
+#####################################################################################################
+
+CRUD operations - CREATE, SELECT, UPDATE, DELETE
+
+
+
+
+
+
+
+
+
+#####################################################################################################
+                                    Query Execution Order 
+#####################################################################################################
+
+FROM
+JOIN
+WHERE
+GROUP BY
+HAVING
+SELECT
+DISTINCT
+ORDER BY
+
+
+    Eg. SELECT name FROM employee WHERE salary>40000 
+
+        Here, first FROM will execute - the entire employee table will be loaded to memory
+        Next, WHERE will execute - only those rows where salary > 40000 will be kept
+        At Last, SELECT will get executed - only name column will be fetched

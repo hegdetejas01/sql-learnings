@@ -1,0 +1,189 @@
+### DML
+
+
+CREATE DATABASE sql_learning
+CREATE TABLE users(
+    user_id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL
+)
+
+
+
+##### INSERT QUERY #####
+
+1. INSERT INTO sql_learning.users (user_id, name, email, password) VALUES (NULL, 'tejas','tejas@gmail.com','1234')
+# making user_id as null because, it is made AUTO_INCREMENT.
+
+2. INSERT INTO sql_learning.users VALUES (NULL, 'ramesh', 'ramesh@gmail.com', '1234')
+# Here column names are no specifies. But all the values for all the columns has to be given in the order the column exist in your DB
+
+3. INSERT INTO sql_learning.users (name, email) VALUES ('suresh','suresh@gmail.com')
+# This inserts only name and email
+
+4. INSERT INTO sql_learning.users (password, email, user_id ,name) VALUES ('1234', 'gopika@gmail.com',NULL,'Gopika')
+# by specifying the column names, you can insert the values in any order
+
+5. Inserting Multiple Rows at once
+
+    INSERT INTO sql_learning.users VALUES 
+    ( NULL, 'raja', 'raja@gmail.com', '1234' ),
+    ( NULL, 'rani', 'rani@gmail.com', '1234' ),
+    ( NULL, 'rorror', 'rorror@gmail.com', '1234' )
+
+
+
+
+
+##### RETRIVE QUERY #####
+
+1. SELECT * FROM sql_learning.smartphones WHERE 1
+# means : fetch all rows and all columns
+# WHERE 1 is optional
+
+2. SELECT * FROM sql_learning.users
+
+3. Filter Columns:
+
+    SELECT model, price, rating, brand_name FROM sql_learning.smartphones 
+    # gets only the said columns - model, price, rating, brand_name
+
+    SELECT model, battery_capacity, os FROM sql_learning.smartphones WHERE 1
+
+4. Renaming the columns - alisaing
+    SELECT model, battery_capacity AS 'mAh' , os AS 'Operating System' FROM sql_learning.smartphones WHERE 1
+
+5. Creating mathematical expression inside a query
+    Eg: Squaring resolution width 
+    SELECT model, resolution_width*resolution_width FROM sql_learning.smartphones
+
+    Eg: Eg: Squaring resolution height adding it to square of resolution width 
+    SELECT model, resolution_width*resolution_width + resolution_height*resolution_height 
+    FROM sql_learning.smartphones
+
+    Eg: Calculating PPI using resolution width, resolution height, screen size
+    SELECT 
+    model, 
+    SQRT(resolution_width*resolution_width + resolution_height*resolution_height)/screen_size AS 'PPI' 
+    FROM sql_learning.smartphones
+
+    SELECT model, rating/10 FROM sql_learning.smartphones
+
+
+6. Creating Constants
+    * This code creates a new column called type and the value will be 'smartphone' (VIEW, not a parmanent change)
+    SELECT  model, 'smartphone' AS 'type' FROM sql_learning.smartphones
+
+7. Disntict - fetching unique values
+    * to fetch the unique brands from data
+    SELECT DISTINCT(brand_name) as 'ALL BRANDS' FROM sql_learning.smartphones
+
+    * brands in processor brand
+    SELECT DISTINCT(processor_brand) as 'ALL PROCESSORS' FROM sql_learning.smartphones
+
+8. Unique Combinations
+    * fetch unique combination of brand_name and processor_brand
+    SELECT DISTINCT brand_name, processor_brand FROM sql_learning.smartphones
+
+
+#####
+9. Filter Rows based on WHERE clause
+
+    # find all samsung brand phones
+    SELECT * FROM sql_learning.smartphones WHERE brand_name = 'samsung'
+
+    # SELECT * FROM sql_learning.smartphones WHERE brand_name = 'apple'
+
+    # price greater than 50k
+    SELECT * FROM sql_learning.smartphones WHERE price > 50000
+
+"""
+REFER HERE FOR OPERATORS : https://drive.google.com/file/d/13Cu0VUqbENcUX76bx_aoBS0EAtzDPDrE/view
+"""
+
+#####
+10. Between operator - gives data between a given range
+
+    # Using WHERE phone between price 20000 and 30000
+    SELECT * FROM sql_learning.smartphones WHERE price > 20000 AND price < 30000
+
+    # Using BETWEEN - This is same as above line of code
+    SELECT * FROM sql_learning.smartphones WHERE price BETWEEN 20000 AND 30000
+
+
+
+# Phones with rating more than 80 and price less than 30000
+SELECT * FROM sql_learning.smartphones WHERE rating > 80 AND price < 30000
+
+# samsung phones with ram > 8
+SELECT * FROM sql_learning.smartphones WHERE brand_name = 'samsung' AND ram_capacity > 8
+
+# samsung phones with snapdragon processor
+SELECT * FROM sql_learning.smartphones WHERE brand_name = 'samsung' AND processor_brand = 'snapdragon'
+
+# brand names which sells phones above 50000
+SELECT DISTINCT brand_name FROM sql_learning.smartphones WHERE price>50000
+SELECT DISTINCT (brand_name) FROM sql_learning.smartphones WHERE price>50000
+
+
+
+11. IN and NOT IN
+# get the phones where processor_brand is snapdragon or bionic or dimensity
+    SELECT * FROM sql_learning.smartphones 
+    WHERE processor_brand = 'snapdragon' OR 
+    processor_brand = 'bionic' OR 
+    processor_brand = 'dimensity'
+
+    ## OR ##
+
+    SELECT * FROM sql_learning.smartphones 
+    WHERE processor_brand IN ('snapdragon','bionic','dimensity')
+
+# phones not with processor_brand is snapdragon or bionic or dimensity
+    SELECT * FROM sql_learning.smartphones 
+    WHERE processor_brand NOT IN ('snapdragon','bionic','dimensity')
+
+
+
+
+
+
+
+##### UPDATE #####
+changing values based on some criteria
+
+# changing processor_brand 'mediatek' to 'dimensity' - without a WHERE clause, it edits everyrows
+    UPDATE sql_learning.smartphones
+    SET processor_brand = 'dimensity'
+    WHERE processor_brand = 'mediatek'
+
+# updating multiple columns
+    UPDATE sql_learning.users
+    SET name='hello', email='hello@gmail.com'
+    WHERE user_id = 1
+
+
+
+##### DELETE ##### 
+* selectively deletes rows
+
+# delete all phones whose price > 2L
+    DELETE FROM sql_learning.smartphones WHERE price>200000
+
+# deleting based on multiple consitions - primary camere > 150 and which are of samsung
+    DELETE FROM sql_learning.smartphones
+    WHERE brand_name = 'samsung' AND primary_camera_rear > 150
+
+
+
+
+
+
+
+
+
+
+
+
+
