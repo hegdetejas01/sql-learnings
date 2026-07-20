@@ -17,13 +17,13 @@ It is the collection of logically related data which is stored and can be retriv
 Usage of DB?
 1. Data Storage - storing large amount of structured data
 2. Data Analysis - data helps to generate insights
-3. Record Keeping - kepp track of important records
-4. Web Application - DBs can be joined in conjuction with mobile/web application
+3. Record Keeping - keep track of important records
+4. Web Application - DBs can be joined in conjunction with mobile/web application
 
 
 4 Operations in DB
 1. Create
-2. Retrive
+2. Retrieve
 3. Update
 4. Delete
 
@@ -31,7 +31,7 @@ Usage of DB?
 *** Properties of IDEAL DB ***
 1. Integrity 
     a. Accuracy
-    b. Consistancy
+    b. Consistency
 
 2. Availability
 * highly available with zero downtime
@@ -59,10 +59,10 @@ Usage of DB?
     * These DB use a relational model to organise data into table with rows and column 
     * Data are stored in tables
     * Tables are often related
-    * It is a row based DB because, one each informationis stored in the form of row
+    * It is a row based DB because, one each information is stored in the form of row
     * Usually used for websites/apps
 
-    Eg: MySQL, Postgre, Oracle, SQL Server, Microsoft access
+    Eg: MySQL, PostgreSQL, Oracle, SQL Server, Microsoft access
 
 
 ### NoSQL database ###
@@ -74,9 +74,9 @@ Usage of DB?
 
 
 ### Column database ###
-    * These DBs stores data in columns unlike relational DBs which stores row wise. 
+    * These DBs store data in columns unlike relational DBs which stores row wise. 
     * It is helpful for data warehousing and analytical application
-    * It is comparitively fast
+    * It is comparatively fast
     * Usually used for analysis
 
     Eg: Amazon Redshift, Google Query
@@ -118,7 +118,7 @@ Terminologies
     4. Cardinality of Relation - Total number of rows
     5. Degree of Relation - Total number of Attributes/columns
     6. Missing Value is called NULL
-    7. Domain - What type of datatype fits in the a particular column?
+    7. Domain - What type of datatype fits in a particular column?
         eg: name column : any string
 
 #########################################################################################
@@ -152,7 +152,7 @@ What is DBMS ?
 
 
 ### KEYS ###
-    * A key is an attribute/column or set of attribute, that uniquiely identifies a Row in the table
+    * A key is an attribute/column or set of attribute, that uniquely identifies a Row in the table
     Eg: 
     In student table with columns - roll num, name, branch, email,
     EMAIL and ROLL NUM can become the KEY
@@ -163,11 +163,11 @@ What is DBMS ?
     # Types of Keys
 
     1. Super Key
-        * It is a combination of columns that uniquiely identifies any row within RDBMS table
+        * It is a combination of columns that uniquely identifies any row within RDBMS table
 
         Eg: 
         In student table with columns - roll num, name, branch, email,
-        All the following (uniquiely identifies a row) becomes Super Key
+        All the following (uniquely identifies a row) becomes Super Key
             - roll num
             - email
             - roll num + name
@@ -222,7 +222,7 @@ What is DBMS ?
 
 ### Cardinality of the Relationships ###
     * It refers to the number of occurrences of an entity in a relationship with another entity
-    * Entity is something which can be represented in terms of Table - student, restraunt etc
+    * Entity is something which can be represented in terms of Table - student, restaurant etc
     * Cardinality defines the number of instances of one entity that can be associated with a single instance of the related entity
 
     It is of three types 
@@ -239,8 +239,8 @@ What is DBMS ?
 
     3. Many to Many relationship
         * student and courses - one student can enroll in multiple courses and a single course can be enrolled by multiple students
-        * restraunt and order
-        * restraunt and menu
+        * restaurant and order
+        * restaurant and menu
 
         ** This requires three tables to store the entire data **
 
@@ -248,17 +248,17 @@ What is DBMS ?
 
 ### Drawbacks of DB ###
 1. Complexity - setting up and managing DB is complex especially for large application
-2. Cost - cost is vey high
+2. Cost - cost is very high
 3. Scalability - as data increases, db becomes difficult to manage leading to performance issues
 4. Data Integrity
 5. Security - cyber attacks increasing
 6. Data Migration - moving from one DB to another OR upgrading to a new DB
-7. Flexibility - the structure is rigid making it difficult to adapt to changing requirment
+7. Flexibility - the structure is rigid making it difficult to adapt to changing requirements
 
 
 
 
-# Hirarchy of Relational DB Model
+# Hierarchy of Relational DB Model
     Database Server --> DBMS --> DB --> Tables --> Rows and Columns
 
 
@@ -288,19 +288,19 @@ Type of SQL Commands
 
 
 ### Data Integrity ###
-    * It referes to accurancy, completeness, consistancy
-    * It is a measure of reliability and trustworthyness
+    * It refers to accurancy, completeness, consistancy
+    * It is a measure of reliability and trustworthiness
     * It ensures data in DB is protected from errors, corruption and unauthorised changes
 
     Constraints:
         * These are the rules that must be met for data to be inserted, updated, deleted from DB tables.
-        * It prevents data from becoming inconsistancy or corrupted.
+        * It prevents data from becoming inconsistent or corrupted.
 
     Transaction: 
         * It is a sequence of DB operations that are treated as a single unit of work.
 
     Normalization: 
-        * It reduces data redundancy and ensures data consistancy by organising data into saperate tables
+        * It reduces data redundancy and ensures data consistency by organising data into saperate tables
 
 
 
@@ -310,13 +310,13 @@ Type of SQL Commands
 2. UNIQUE           # that column data should be unique
 3. PRIMARY KEY      # not null + unique 
 4. AUTO INCREMENT
-5. CHECK            # applies check on a particular columns. Eg: age>9
+5. CHECK            # applies a check on a particular column. Eg: age>9
 6. DEFAULT          # assigning a default value. Eg: registration date: today's date
 7. FOREIGN KEY
 
 
 
-### Referential Actions - If 2 tables are related via forign key, what happens to one table upon deleting or updating a key in another table.
+### Referential Actions - If 2 tables are related via foreign key, what happens to one table upon deleting or updating a key in another table.
 
 It is of 4 types
     1. Restrict - default behaviour
@@ -332,14 +332,14 @@ Consider the following schema:
 
 
 1. Restrict : 
-    * if there is customer with id: 4 and if his id is also present in orders, then the DBMS doesn't allow to delete/modify that customer(with id: 4) from the customer table.
+    * if there is a customer with id: 4 and if his id is also present in orders, then the DBMS doesn't allow to delete/modify that customer(with id: 4) from the customer table.
     * This is the default behaviour
 
 2. Cascade : 
-    * if there is customer with id: 4 and if his id is also present in orders, then any changes will be reflected in the orders table also. It that customer is deleted from the customer table, then all the entries related to his customer id will also be deleted from the orders table.
+    * if there is a customer with id: 4 and if his id is also present in orders, then any changes will be reflected in the orders table also. If that customer is deleted from the customer table, then all the entries related to his customer id will also be deleted from the orders table.
     
 3. Set null : 
-    * upon deleting that customer in the customer table, the foreignkey in the orders table will be set to null
+    * upon deleting that customer in the customer table, the foreign key in the orders table will be set to null
 
 4. Set default: 
     * upon deleting that customer in the customer table, the foreignkey in the orders table will be set to the default value
@@ -404,3 +404,4 @@ There Are Two Types Of Functions:
         b. aggregate functions - sum, avg, min, max, std deviation, variance etc
         
     2. User Defined
+
