@@ -1,0 +1,68 @@
+#####################################################################################################
+                                        SORTING DATA
+#####################################################################################################
+
+### Sorting based on single column
+
+# Top 5 samsung phones with biggest screen size
+    SELECT * FROM sql_learning.smartphones WHERE brand_name='samsung' ORDER BY screen_size DESC LIMIT 5
+
+    - ORDER BY is used to SORT, 
+    - DESC and ASC - ascending and descending
+    - LIMIT 5 - outputs top 5 rows (head in pandas)
+
+
+# sort all phones in descending order of number of total cameras
+    SELECT model, (num_rear_cameras + num_front_cameras) AS 'total_cameras' FROM sql_learning.smartphones
+    ORDER BY (num_rear_cameras + num_front_cameras) DESC
+
+        ## OR ##
+    SELECT model, (num_rear_cameras + num_front_cameras) AS 'total_cameras' FROM sql_learning.smartphones
+    ORDER BY total_cameras DESC
+
+
+# sort data based on ppi in decresing order - TOP 10
+    SELECT model, 
+    SQRT(resolution_width*resolution_width + resolution_height*resolution_height)/screen_size AS 'ppi' 
+    FROM sql_learning.smartphones 
+    ORDER BY ppi DESC LIMIT 10
+
+
+# find the phone with 2nd highest battery capacity
+    SELECT model, battery_capacity 
+    FROM sql_learning.smartphones 
+    ORDER BY battery_capacity DESC LIMIT 1,1
+
+    - LIMIT takes 2 parameter (x,y) eg: LIMIT 1,1
+    - that means, after x rows, give me y rows
+    - for LIMIT 3,4 : it ignores row 0,1,2 and prints 4 rows starting from 3rd row [3,4,5,6] - start from 3rd row and give me 4 rows
+    - for LIMIT 5,2 : it prints rows [5,6] - start from 5th row and give me 2 rows
+
+
+# find the phone with 2nd lowest battery capacity
+    SELECT model, battery_capacity 
+    FROM sql_learning.smartphones 
+    ORDER BY battery_capacity ASC LIMIT 1,1
+
+# find the name and rating of worst apple phone
+    SELECT model, rating 
+    FROM sql_learning.smartphones 
+    WHERE brand_name = 'apple' 
+    ORDER BY rating ASC LIMIT 1
+
+
+
+
+### Sorting based on 2 columns
+
+# sort based on both brand_name and price both in ascending order
+    SELECT model, price 
+    FROM sql_learning.smartphones
+    ORDER BY brand_name ASC, price ASC
+
+# sort based on both brand_name and rating, brand_name in a,b,c,d,.... order, rating in descending order
+    SELECT model, rating 
+    FROM sql_learning.smartphones
+    ORDER BY brand_name ASC, rating DESC
+
+    
