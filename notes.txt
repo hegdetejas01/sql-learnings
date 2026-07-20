@@ -21,7 +21,7 @@ Usage of DB?
 4. Web Application - DBs can be joined in conjunction with mobile/web application
 
 
-4 Operations in DB
+4 Operations in DB - CRUD
 1. Create
 2. Retrieve
 3. Update
@@ -59,7 +59,7 @@ Usage of DB?
     * These DB use a relational model to organise data into table with rows and column 
     * Data are stored in tables
     * Tables are often related
-    * It is a row based DB because, one each information is stored in the form of row
+    * It is a row based DB because, each information of a person (for example) is stored in the form of row
     * Usually used for websites/apps
 
     Eg: MySQL, PostgreSQL, Oracle, SQL Server, Microsoft access
@@ -417,7 +417,7 @@ COUNT(*) - counts the number of rows
 #####################################################################################################
 
 * It is a way to combine data from two or more tables based on a common connecting column
-* It is useful when data is distributed accross tables. Joins creates a temporary table on which the operations can be performed
+* It is useful when data is distributed accross tables. Joins creates a temporary table on which the operations can be performed.
 
 Why do we need multiple tables?
 1. To reduce data redundancy
