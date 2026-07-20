@@ -405,3 +405,7 @@ There Are Two Types Of Functions:
         
     2. User Defined
 
+
+
+COUNT(*) - counts the number of rows
+

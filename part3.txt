@@ -65,4 +65,123 @@
     FROM sql_learning.smartphones
     ORDER BY brand_name ASC, rating DESC
 
-    
+
+
+
+
+#####################################################################################################
+                                        GROUPING DATA
+#####################################################################################################
+
+### group by single column
+
+# group smartphones by brand and get the count of each brand - get the number of smartphones in each brand
+    SELECT  brand_name, COUNT(*) AS 'total_phones' 
+    FROM sql_learning.smartphones
+    GROUP BY brand_name
+    ORDER BY total_phones DESC
+
+# group smartphones by brand and get the count of each brand - get the number of smartphones, average price, max rating, avg screen size, avg battery_capacity in each brand
+    SELECT  brand_name, COUNT(model) AS 'total_phones', 
+    ROUND(AVG(price),2) AS 'avg price', 
+    ROUND(AVG(battery_capacity),2) AS 'avg battery', 
+    ROUND(MAX(rating),2) AS 'max rating', 
+    ROUND(AVG(screen_size),2) AS 'avg batter' 
+    FROM sql_learning.smartphones
+    GROUP BY brand_name
+    ORDER BY total_phones DESC
+
+
+# group smartphone by whether they have NFC and get avg price and avg rating
+    SELECT has_nfc, AVG(price), AVG(rating) FROM sql_learning.smartphones GROUP BY has_nfc
+
+# group smartphone by whether they have 5g and get avg price and avg rating
+    SELECT has_nfc, AVG(price), AVG(rating) FROM sql_learning.smartphones GROUP BY has_5g
+
+# group smartphone by whether they have fast_charging_available and get avg price and avg rating
+    SELECT fast_charging_available, AVG(price), AVG(rating) FROM sql_learning.smartphones GROUP BY fast_charging_available
+
+
+
+### group by  multiple columns
+
+# groups on has_nfc, has_5g and get their average price and average rating
+    SELECT has_5g, has_nfc, AVG(price), AVG(rating) FROM sql_learning.smartphones GROUP BY has_5g, has_nfc
+
+# group by brand and processor brand, and get count of phones and average primary camera resolutions(rear)
+    SELECT brand_name, processor_brand, 
+    COUNT(*) AS 'total_phones', 
+    ROUND(AVG(primary_camera_rear), 2) AS 'average_cam_resolution' 
+    FROM sql_learning.smartphones 
+    GROUP BY brand_name, processor_brand
+
+
+
+# top 5 most costly phone brands
+    SELECT brand_name, ROUND(AVG(price)) as 'average_price' 
+    FROM sql_learning.smartphones
+    GROUP BY brand_name
+    ORDER BY average_price DESC LIMIT 5
+
+# which brand makes the smallest screen size
+    SELECT brand_name, ROUND(AVG(screen_size)) as 'average_screensize' 
+    FROM sql_learning.smartphones
+    GROUP BY brand_name
+    ORDER BY average_screensize ASC LIMIT 1
+
+# group smartphones by brand and find brands with highest number of models that have both NFC and IR blaster
+    SELECT brand_name, COUNT(*) AS 'ans' FROM sql_learning.smartphones 
+    WHERE has_ir_blaster = 'True' AND has_nfc = 'True'
+    GROUP BY brand_name
+
+# find all 5g samsung phones and find the avg price of nfc and non nfc phones
+    SELECT has_nfc, AVG(price) FROM sql_learning.smartphones
+    WHERE brand_name = 'samsung' AND has_5g = 'True'
+    GROUP BY has_nfc
+
+
+
+
+
+
+#####################################################################################################
+                                        HAVING CLAUSE
+#####################################################################################################
+
+* filtering the GROUP BY
+* The way how,
+    WHERE works on SELECT
+
+    The same way,
+    HAVING works on GROUP BY
+
+* Applying condition for GROUP BY
+
+
+# get the average price phones of those brands which has atleast 20 phones
+    SELECT brand_name, ROUND(AVG(price),2) AS 'avg_price'
+    FROM sql_learning.smartphones
+    GROUP BY brand_name
+    HAVING COUNT(*) > 20
+    ORDER BY avg_price DESC
+
+# avg rating of smartphone brands with more than 40 phones
+    SELECT brand_name, ROUND(AVG(rating),2) AS 'avg_rating'
+    FROM sql_learning.smartphones
+    GROUP BY brand_name
+    HAVING COUNT(*) > 40
+
+# Top 3 brands with highest avg ram that have a refresh rate of at least 90 Hz and fast charging available and don't consider brands less than 10 phones
+    SELECT brand_name, ROUND(AVG(ram_capacity)) AS 'avg_ram'
+    FROM sql_learning.smartphones
+    WHERE refresh_rate >= 90 AND fast_charging_available = 1
+    GROUP BY brand_name
+    HAVING COUNT(*) > 10
+    ORDER BY avg_ram DESC LIMIT 3
+
+# avg phone price of all phone brands with avg rating > 70 and number of phones > 10 among all 5g phones
+    SELECT brand_name, ROUND(AVG(price)) AS 'avp' 
+    FROM sql_learning.smartphones
+    WHERE has_5g = 'True'
+    GROUP BY brand_name
+    HAVING count(*) > 10 AND avg(rating) > 70
