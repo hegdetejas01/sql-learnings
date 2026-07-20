@@ -1,9 +1,12 @@
+-- DDL commands for database -> create, drop 
 CREATE DATABASE employee
 CREATE DATABASE IF NOT EXISTS employee  
 
 DROP DATABASE employee
 DROP DATABASE IF EXISTS employee 
 
+
+-- DDL commands for tables -> create, truncate, drop    
 CREATE TABLE students(
     student_id INT,
     student_name VARCHAR(255),
@@ -14,6 +17,8 @@ TRUNCATE TABLE students
 
 DROP TABLE IF EXISTS students
 
+-- Constraints 
+-- NOT NULL      
 CREATE TABLE student (
     student_id INT NOT NULL,
     student_name VARCHAR(255) NOT NULL,
@@ -21,13 +26,14 @@ CREATE TABLE student (
     student_password VARCHAR(255) NOT NULL
 )
 
+-- UNIQUE
 CREATE TABLE students(
     id INTEGER NOT NULL,
     name VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL
 )
-
+    
 CREATE TABLE students(
     id INT NOT NULL,
     name VARCHAR(255) NOT NULL,
@@ -46,6 +52,7 @@ CREATE TABLE students(
     CONSTRAINT students_name_email_unique UNIQUE (name, email)
 )
 
+-- PRIMARY KEY    
 CREATE TABLE students(
     id INT NOT NULL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
@@ -75,6 +82,7 @@ CREATE TABLE students(
     CONSTRAINT students_id_name_pk PRIMARY KEY (id, name)
 )
 
+-- AUTO_INCREMENT
 CREATE TABLE students(
     id INT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(255) NOT NULL,
@@ -82,6 +90,7 @@ CREATE TABLE students(
     password VARCHAR(255) NOT NULL
 )
 
+-- CHECK    
 CREATE TABLE teachers(
     id INT PRIMARY KEY,
     name VARCHAR(50) NOT NULL,
@@ -96,12 +105,14 @@ CREATE TABLE teachers(
     CONSTRAINT teachers_age_check CHECK (age>25 AND age<60) 
 )
 
+-- DEFAULT    
 CREATE TABLE ticket(
     ticket_id INT PRIMARY KEY,
     name VARCHAR(50) NOT NULL,
     booking_date DATETIME DEFAULT CURRENT_TIMESTAMP
 )
 
+-- FOREIGN KEY    
 CREATE TABLE customers( 
     cid INT PRIMARY KEY AUTO_INCREMENT, 
     name VARCHAR(50) NOT NULL, 
@@ -117,7 +128,7 @@ CREATE TABLE orders(
     CONSTRAINT orders_cid_fk FOREIGN KEY (cid) REFERENCES customers(cid)
 )
 
-    CREATE TABLE customers( 
+ CREATE TABLE customers( 
     customer_id INT PRIMARY KEY AUTO_INCREMENT, 
     name VARCHAR(50) NOT NULL
 )
@@ -157,5 +168,7 @@ MODIFY COLUMN surname VARCHAR(15)
 ALTER TABLE customers ADD COLUMN age INT NOT NULL
 
 ALTER TABLE customers ADD CONSTRAINT customers_age_check CHECK (age<18) 
-
+    
 ALTER TABLE customers DROP CONSTRAINT customers_age_check
+
+ALTER TABLE customers ADD CONSTRAINT customers_age_check CHECK (age<20) -- because we can't modify a constraint, first delete the old constraint and create new one
