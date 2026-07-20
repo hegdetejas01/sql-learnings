@@ -1,0 +1,103 @@
+### JOIN OPERATIONS ###
+
+# Cross Join on Groups(4 rows) and Users(6 rows)
+    SELECT * FROM sql_learning.users_join_1 t1
+    CROSS JOIN sql_learning.groups_join_1 t2
+
+    - aliasing users table as t1 and groups table as t2
+    - it has total of 24 rows
+
+
+# Inner Join on users and membership
+    - on user id column
+    - in users - user id 8, 11 is present, which is not present in membership
+    - in membership - user id 5, 6 is present, which is not present in users
+    - therefore, all these details will not be present in result
+
+    SELECT * FROM sql_learning.users_join_1 t1
+    INNER JOIN sql_learning.membership_join_1 t2
+    ON t1.user_id = t2.user_id
+
+        ## OR ##
+    SELECT * FROM sql_learning.users_join_1 t1
+    JOIN sql_learning.membership_join_1 t2
+    ON t1.user_id = t2.user_id
+
+
+# Left Join on membership and users
+    - membership: left table, users: right table
+    - on user id column
+    - in membership - user id 5, 6 is present, which is not present in users
+    - in users - user id 8, 11 is present, which is not present in membership
+    - therefore, user id 5,6 will also be in the result with the corresponding values of user table as NULL
+
+    SELECT * FROM sql_learning.membership_join_1 t1
+    LEFT JOIN sql_learning.users_join_1 t2
+    ON t1.user_id = t2.user_id
+
+
+# Right Join on membership and users
+    - membership: left table, users: right table
+    - on user id column
+    - in membership - user id 5, 6 is present, which is not present in users
+    - in users - user id 8, 11 is present, which is not present in membership
+    - therefore, user id 8, 11 will also be in the result with the corresponding values of membership table as NULL
+
+    SELECT * FROM sql_learning.membership_join_1 t1
+    RIGHT JOIN sql_learning.users_join_1 t2
+    ON t1.user_id = t2.user_id
+
+
+# Full Outer Join - doesn't work in MySQL
+
+    Other way to do FULL OUTER JOIN - left join union with right join
+        SELECT * FROM sql_learning.membership_join_1 t1
+        LEFT JOIN sql_learning.users_join_1 t2
+        ON t1.user_id = t2.user_id
+        UNION
+        SELECT * FROM sql_learning.membership_join_1 t1
+        RIGHT JOIN sql_learning.users_join_1 t2
+        ON t1.user_id = t2.user_id
+
+
+# Self Join.
+    SELECT t1.name as 'name', t2.name as 'emergency' 
+    FROM sql_learning.users_join_1 t1
+    JOIN sql_learning.users_join_1 t2
+    ON t1.emergency_contact = t2.user_id
+
+
+
+## JOINING ON MORE THAN ONE Columns
+    SELECT * FROM sql_learning.students_join t1
+    JOIN sql_learning.class_join t2
+    ON t1.class_id = t2.class_id 
+    AND t1.enrollment_year = t2.class_year
+
+
+
+### SET OPERATIONS ###
+
+1. Union
+    SELECT * FROM sql_learning.person1_set 
+    UNION 
+    SELECT * FROM sql_learning.person2_set
+
+2. Union All
+    SELECT * FROM sql_learning.person1_set 
+    UNION ALL
+    SELECT * FROM sql_learning.person2_set
+
+3. Intersect
+    SELECT * FROM sql_learning.person1_set 
+    INTERSECT
+    SELECT * FROM sql_learning.person2_set
+
+4. Except
+    SELECT * FROM sql_learning.person1_set 
+    EXCEPT
+    SELECT * FROM sql_learning.person2_set
+
+    SELECT * FROM sql_learning.person2_set 
+    EXCEPT
+    SELECT * FROM sql_learning.person1_set

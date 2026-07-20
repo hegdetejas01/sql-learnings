@@ -409,3 +409,88 @@ There Are Two Types Of Functions:
 
 COUNT(*) - counts the number of rows
 
+
+
+
+#####################################################################################################
+                                        SQL JOINS 
+#####################################################################################################
+
+* It is a way to combine data from two or more tables based on a common connecting column
+* It is useful when data is distributed accross tables. Joins creates a temporary table on which the operations can be performed
+
+Why do we need multiple tables?
+1. To reduce data redundancy
+2. Reduces update/delete anomoly
+3. Data will be well organised  
+
+The entire process is called as Normalization - unique entities are divided into different tables
+
+
+
+
+########### Types Of Joins ###########
+6 Types of Joins - inner, left, right, full outer, cross, self
+
+
+### Cross Join.
+1. Also known Cartesian Product
+2. Return Cartesian product of two tables being joined
+3. It return all the possible combination of Rows from 2 tables
+4. Applicable on rows
+5. Not commonly used
+
+
+### Inner Join.
+1. Combines data from two or more tables based on specified condition
+2. Only the rows from both the table will be returned that satisfies the specified condition
+3. Gives the intersection of data on a specified condition
+4. Joins on a common column
+
+
+### Left Join.
+1. Also called as Left Outer Join
+2. Returns all the rows from left table and also the matching rows from the right table
+3. If there are no matching rows in right table, the result will have null values in the columns that come from the right table
+4. Joins 2 tables based on common column - it returns all the data from the left table even if there is no match in right table
+
+
+### Right Join.
+1. Also called as Right Outer Join
+2. Returns all the rows from right table and also the matching rows from the left table
+3. If there are no matching rows in left table, the result will have null values in the columns that come from the left table
+4. Joins 2 tables based on common column - it returns all the data from the right table even if there is no match in left table
+
+
+### Full Outer Join.
+1. Also called as Full Join
+2. Returns all matching rows from both left and right table and also non matching rows from both tables.
+3. It fills NULL values for columns that don't have a match
+
+
+### Self Join.
+1. A table is joined with itself
+2. The same table is treated as two different tables
+3. Used when one need compare a row with another row if the same table
+
+
+
+
+
+#####################################################################################################
+                                        SET OPERATIONS
+#####################################################################################################
+
+1. Union Operation
+    * used to combine two or more select statements into single result removing the duplicates.
+
+2. Union All
+    * Union + keeps duplicates
+
+3. Intersect - common element
+
+4. Except/minus
+    * keeps the data present in the first one that is not present in the second one
+
+
+
