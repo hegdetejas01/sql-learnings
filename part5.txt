@@ -1,0 +1,281 @@
+#####################################################################################################
+                                        SUB QUERY
+#####################################################################################################
+
+########################## USING WITHIN WHERECLAUSE ##########################
+
+# get the movie with highest rating using sub query
+    SELECT * FROM sql_learning.movies
+    WHERE score = (SELECT MAX(score) FROM sql_learning.movies)
+
+    - here inner query : (SELECT MAX(score) FROM sql_learning.movies) executes first
+    - the outer query : executes later from the result from inner query
+
+
+
+### Independent SubQuery + Scalar Values ###
+
+# find the movie with higher profit
+    USE sql_learning;
+    SELECT * FROM movies
+    WHERE gross-budget = (SELECT MAX(gross - budget) from movies)
+
+    ## OR (using order by) ##
+    SELECT * FROM movies
+    ORDER BY gross - budget DESC LIMIT 1
+
+    - The 2nd type is faster because it uses the concept of indexing
+    - Without indexing, the first type is faster
+
+# find how many movies have rating more than average of all the movies
+    USE sql_learning;
+    SELECT COUNT(*) FROM movies
+    WHERE score > 
+        (SELECT AVG(score) from movies)
+
+# find highest rated movie of 1980
+    USE sql_learning;
+    SELECT * FROM movies
+    WHERE year = 1980 AND 
+    score = 
+        (SELECT MAX(score) FROM movies 
+        WHERE year = 1980);
+
+# find highest rated movie among all movies whose number of votes > dataset avg votes : query inside query inside query
+    SELECT * FROM movies 
+    WHERE score = 
+        (SELECT MAX(score) FROM movies 
+        WHERE votes > 
+            (SELECT AVG(votes) FROM movies))
+
+
+
+
+### Independent SubQuery + Row SubQuery ###
+
+# Find all users who donot order
+    USE zomato;
+    SELECT name, user_id FROM users_subquery WHERE user_id
+    NOT IN (SELECT DISTINCT(user_id) FROM orders_subquery)
+
+        - SELECT DISTINCT(user_id) FROM orders_subquery - this gives the users who have ordered - this is a row sub query 
+        - NOT IN
+
+# Find all movies made by top 3 director(based on total gross collection)
+    USE sql_learning;
+    SELECT * FROM movies 
+    WHERE director IN 
+        (SELECT director
+        FROM movies
+        GROUP BY director
+        ORDER BY SUM(gross) DESC 
+        LIMIT 3)
+
+    ## OR ##
+    USE sql_learning;
+    WITH top_directors AS (SELECT director
+        FROM movies
+        GROUP BY director
+        ORDER BY SUM(gross) DESC 
+        LIMIT 3)
+    SELECT * FROM movies 
+    WHERE director IN (SELECT * FROM top_directors)
+
+
+        - The first method doesn't work in MySQL
+        - In the second type, top_directors is a temporary table. This temporary table is used inside the main query
+
+
+# Find all movies of all actors of whose avg rating is > 8.5, considering 25000 votes as cutoff
+    USE sql_learning;
+    SELECT * FROM movies WHERE star IN (
+        SELECT star FROM movies
+        WHERE votes > 25000
+        GROUP BY (star)
+        HAVING AVG(score) > 8.2)
+
+
+
+
+### Independent SubQuery + Table SubQuery ###
+
+# find the most profitable movie of each year
+    USE sql_learning;
+    SELECT * FROM movies 
+    WHERE (year, gross-budget) IN 
+        (SELECT year, MAX(gross - budget) FROM movies 
+        GROUP BY year)
+
+# find highest rated movie of each genre votes cutoff of 25000
+    USE sql_learning;
+    SELECT * FROM movies
+    WHERE (genre, score) IN 
+        (SELECT genre, MAX(score) FROM movies
+        WHERE votes>25000
+        GROUP BY genre)
+    AND votes>25000
+
+# find highest grossing movies of top 5 actor-director combo in terms of total gross income
+    USE sql_learning;
+    WITH top_combo AS 
+        (select star, director, max(gross) 
+        FROM movies 
+        GROUP BY star, director
+        ORDER BY sum(gross) DESC 
+        LIMIT 5)
+    SELECT * FROM movies WHERE (star, director, gross) IN (SELECT * FROM top_combo)
+
+
+
+
+### Co-Related SubQuery ###
+
+# find all the movies that have a rating higher than the average rating of movies in the same genre
+    USE sql_learning;
+    SELECT * FROM movies m1
+    WHERE score > (SELECT AVG(score) FROM movies m2 
+                    WHERE m2.genre = m1.genre)
+
+
+# find the favorite food of each customer
+    USE zomato;
+
+    WITH fav_food AS (
+        SELECT t2.user_id, t1.name, t4.f_name, COUNT(*) AS 'freq' FROM users_subquery t1
+        JOIN orders_subquery t2 ON t1.user_id = t2.user_id
+        JOIN order_details_subquery t3 ON t2.order_id = t3.order_id
+        JOIN food t4 ON t3.f_id = t4.f_id
+        GROUP BY t1.user_id, t3.f_id)
+
+    SELECT * FROM fav_food f1 
+    WHERE freq = (SELECT MAX(freq) 
+                    FROM fav_food f2 
+                    WHERE f2.user_id = f1.user_id)
+
+
+
+
+
+
+
+
+
+
+########################## USING WITHIN SELECT CLAUSE ##########################
+
+# Get the percentage of votes for each movie compared to total number votes
+    USE sql_learning;
+    SELECT name, (votes/(SELECT SUM(votes) FROM movies)*100) FROM movies
+
+# Display all movie names, genre, score, avg score of genre
+    USE sql_learning;
+    SELECT name, genre g, score, 
+    (SELECT AVG(score) FROM movies m WHERE m.genre = g) AS 'Avg_Rating' 
+    FROM movies
+
+    ## OR ##
+    USE sql_learning;
+    SELECT name, genre, score, 
+    (SELECT AVG(score) FROM movies m2 WHERE m2.genre = m1.genre) AS 'Avg_Rating' 
+    FROM movies m1
+
+
+
+
+
+
+
+
+
+
+########################## USING WITHIN FROM ##########################
+
+# get the average rating of all the restaurant
+    USE zomato;
+    SELECT t1.r_id, t2.r_name, AVG(restaurant_rating) FROM orders_subquery t1
+    JOIN restaurants t2 ON t1.r_id = t2.r_id
+    GROUP BY r_id;
+
+    ## OR ##
+    USE zomato;
+    SELECT r_name, avg_rating FROM 
+	(SELECT r_id, AVG(restaurant_rating) AS 'avg_rating' FROM orders_subquery
+	GROUP BY r_id) t1 
+    JOIN restaurants t2 ON t1.r_id = t2.r_id
+
+
+
+
+
+
+
+
+
+
+########################## USING WITHIN FROM ##########################
+
+# find genres having avg score > avg score of all movies
+    USE sql_learning;
+    SELECT genre, AVG(score) AS 'avg_score' FROM movies
+    GROUP BY genre
+    HAVING avg_score >= (SELECT AVG(score) FROM movies)
+
+
+
+
+
+
+
+########################## USING WITHIN INSERT ##########################
+
+# insert into loyal customers with records of customers who have ordered more than 3 times
+    CREATE TABLE loyal_customers (
+
+        user_id INT NOT NULL,
+        name VARCHAR(50) not null,
+        money FLOAT
+
+    );
+
+    USE zomato;
+    INSERT INTO loyal_customers (user_id, name)
+    SELECT t1.user_id, t2.name from orders_subquery t1
+    JOIN users_subquery t2 ON t1.user_id = t2.user_id
+    GROUP BY user_id
+    HAVING COUNT(*) > 3
+
+
+
+########################## USING WITHIN UPDATE ##########################
+
+# update money column of loyal_customers by providing 10 percent app money based on their order value
+
+USE zomato;
+UPDATE loyal_customers t1
+SET money = 
+(SELECT SUM(amount) * 0.1 FROM orders_subquery t2 WHERE t2.user_id = t1.user_id)
+
+
+
+
+
+
+########################## USING WITHIN DELETE ##########################
+
+# delete those who haven't ordered
+
+    Delete FROM users_subquery
+    WHERE user_id IN (
+        SELECT user_id FROM users_subquery
+        WHERE user_id NOT IN (
+            SELECT DISTINCT(user_id) FROM orders_subquery))
+
+
+
+
+
+
+
+
+
+

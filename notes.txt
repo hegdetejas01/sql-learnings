@@ -494,3 +494,37 @@ The entire process is called as Normalization - unique entities are divided into
 
 
 
+
+
+
+#####################################################################################################
+                                        SUB QUERY
+#####################################################################################################
+
+
+Sub Query is a query within another query.
+It is a select statement inside another select, insert, update, delete statement
+Sub query is executed first and the result is used for outer statement execution
+
+### Types of SubQuery 
+
+1. Based on the RETURN Value
+    a. Scalar Sub query - a scalar/single value is returned
+        eg: SELECT * FROM sql_learning.movies WHERE score = (SELECT MAX(score) FROM sql_learning.movies)
+
+    b. Row Sub query - retuns multiple rows but one column
+    c. Table Sub query - returns multiple rows and multiple columns
+
+2. Based on execution
+    a. Independent Sub query - if inner query doesn't depend on the outer query
+        eg: SELECT * FROM sql_learning.movies WHERE score = (SELECT MAX(score) FROM sql_learning.movies)
+
+    b. Co-Related Sub query - inner query depend on outer query or outer query data and can't execute independently
+
+
+# Where can subqueries be used?
+    It can be used with 
+        INSERT, 
+        SELECT - Where, Select, From, Having,
+        UPDATE,
+        DELETE.
