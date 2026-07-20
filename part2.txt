@@ -104,6 +104,8 @@ CREATE TABLE users(
 REFER HERE FOR OPERATORS : https://drive.google.com/file/d/13Cu0VUqbENcUX76bx_aoBS0EAtzDPDrE/view
 """
 
+Query execution order - infytq - FROM, JOIN, WHERE, GROUP BY, HAVING, SELECT, DISTINCT, ORDER BY
+
 #####
 10. Between operator - gives data between a given range
 
@@ -187,6 +189,12 @@ changing values based on some criteria
 #####################################################################################################
                                         SQL FUNCTIONS 
 #####################################################################################################
+SQL Functions
+1. Built-in
+    1. Scalar
+    2. Aggregate
+2. User defined
+
 
 ### Aggregate Functions
 
@@ -250,7 +258,7 @@ changing values based on some criteria
 
 
 
-SELECT AVG(battery_capacity) , AVG(primary_camera_rear) FROM sql_learning.smartphones WHERE price>100000
+SELECT AVG(battery_capacity) , AVG(primary_camera_rear) FROM sql_learning.smartphones WHERE price>=100000
 
 SELECT AVG(internal_memory) FROM sql_learning.smartphones WHERE refresh_rate>=120 AND (num_front_cameras * primary_camera_front) > 20
 
