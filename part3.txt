@@ -96,7 +96,7 @@
     SELECT has_nfc, AVG(price), AVG(rating) FROM sql_learning.smartphones GROUP BY has_nfc
 
 # group smartphone by whether they have 5g and get avg price and avg rating
-    SELECT has_nfc, AVG(price), AVG(rating) FROM sql_learning.smartphones GROUP BY has_5g
+    SELECT has_5g, AVG(price), AVG(rating) FROM sql_learning.smartphones GROUP BY has_5g
 
 # group smartphone by whether they have fast_charging_available and get avg price and avg rating
     SELECT fast_charging_available, AVG(price), AVG(rating) FROM sql_learning.smartphones GROUP BY fast_charging_available
@@ -108,7 +108,7 @@
 # groups on has_nfc, has_5g and get their average price and average rating
     SELECT has_5g, has_nfc, AVG(price), AVG(rating) FROM sql_learning.smartphones GROUP BY has_5g, has_nfc
 
-# group by brand and processor brand, and get count of phones and average primary camera resolutions(rear)
+# group smartphones by the brand and processor brand, and get count of models and average primary camera resolutions(rear)
     SELECT brand_name, processor_brand, 
     COUNT(*) AS 'total_phones', 
     ROUND(AVG(primary_camera_rear), 2) AS 'average_cam_resolution' 
@@ -133,6 +133,7 @@
     SELECT brand_name, COUNT(*) AS 'ans' FROM sql_learning.smartphones 
     WHERE has_ir_blaster = 'True' AND has_nfc = 'True'
     GROUP BY brand_name
+    ORDER BY ans DESC LIMIT 1
 
 # find all 5g samsung phones and find the avg price of nfc and non nfc phones
     SELECT has_nfc, AVG(price) FROM sql_learning.smartphones
