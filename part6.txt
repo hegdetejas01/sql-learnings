@@ -229,12 +229,14 @@ ORDER BY student_id
 ############## LEAD and LAG functions ##############
 
 LAG - gives the previous row value
+* lag(data, 7) shows data which is 7 entry back
     USE sql_learning;
     select *, 
     lag(marks) over(order by student_id) 
     from marks
 
 LEAD - gives the next row value
+* lead(data, 7) shows data which is 7 entry forward
     USE sql_learning;
     select *, 
     lag(marks) over(order by student_id),
@@ -351,3 +353,131 @@ It helps to identify trends
     group by f_id) t
     join food t3 on t.f_id = t3.f_id
     order by percent desc
+
+
+
+
+
+############### PERCENTAGE CHANGE ###############
+    select num2 , lag(num2) over(order by num1 desc),
+    ((num2 - (lag(num2) over(order by num1 desc)))/(lag(num2) over(order by num1 desc))) * 100 as 'pct_ch'
+    from sql_learning.test_frame
+
+
+
+
+############### Quantiles ###############
+It is a measure of distribution of a dataset that divides data into any number of equally sized interval
+1. 10 equal parts: deciles
+2. 4 equal parts: quartiles
+3. 100 equal parts: percentiles
+
+Percentile: each quantile represents a value below a certain percentage of data falls
+eg: 25th percentile(1st quartile, Q1) represents value below which 25% data falls
+eg: 50th percentile(Median) 
+
+## Median of a data - 50th percentile
+    USE sql_learning;
+    select *, 
+    percentile_disc(0.5) within group(order by marks) over() as 'median marks' 
+    from marks
+
+        - within groups is sorting data based on marks in ascending order
+
+## 75th percentile
+    USE sql_learning;
+    select *, 
+    percentile_disc(0.75) within group(order by marks) over() as 'median marks' 
+    from marks
+
+## branch_wise median
+    USE sql_learning;
+    select *, 
+    percentile_disc(0.5) within group(order by marks) over(partition by branch) as 'median marks' 
+    from marks
+
+
+
+####### PERCENTILE CONT #######
+    USE sql_learning;
+    select *, 
+    percentile_disc(0.5) within group(order by marks) over(partition by branch) as 'median marks disc',
+    percentile_cont(0.5) within group(order by marks) over(partition by branch) as 'median marks cont' 
+    from marks
+
+# difference between percentile cont and percentile disc
+    * percentile cont: calculates the continuous percentile values. It assumes that the data is distributed uniformly. This may give the value which may not be present in data
+    * percentile cont: calculates the discreet percentile values. This always gives the result present in data
+
+
+# adding a outlier
+insert into marks values (17, 'Ramya', 'EEE', 1)
+
+### Removing outlier user interquartile range 
+    (Q3 - Q1) is IQR
+    min value = (Q1 - 1.5(IQR))
+    max value = (Q3 + 1.5(IQR))
+    outliers are those points which are beyond min and max values
+
+        select *
+        from (select *, 
+        percentile_disc(0.25) within group(order by marks) over() as 'q1',
+        percentile_disc(0.75) within group(order by marks) over() as 'q3',
+        (percentile_disc(0.75) within group(order by marks) over())-(percentile_disc(0.25) within group(order by marks) over()) as "IQR"
+        from marks) t
+        where t.marks > q1-1.5*IQR and t.marks < q3+1.5*IQR
+        order by t.student_id
+
+
+
+
+
+
+
+
+####### SEGMENTATION ####### 
+It uses NTILE (it divides data into buckets on basis of some criteria or column) to divide dataset into equal sized groups based on some condition and performing calculations on each group saperately using window function
+
+eg: classifying customers into premium, normal based on their purchase value
+
+* this code creates 3 groups
+    select *,
+    NTILE(3) over() as 'groups'
+    from marks
+
+* this code creates 3 buckets based on marks - highest marks students in bucket 1, followed by bucket 2 and than bucket 3
+    select *,
+    NTILE(3) over(order by marks desc) as 'groups'
+    from marks
+
+
+* this code creates 3 buckets based on phone price and assignes name to those buckets 
+    use sql_learning;
+    select brand_name, model, price,
+    CASE
+        when bucket = 1 then 'budget'
+        when bucket = 2 then 'mid-range'
+        when bucket = 3 then 'premium'
+    END AS 'phone_type'
+
+    from (select brand_name, model, price,
+    NTILE(3) over(order by price) as 'bucket'
+    from smartphones) t
+
+
+
+
+
+
+####### CUMULATIVE DISTRIBUTION ####### 
+1. The cumulative distribution function is used to describe the probability distribution of random variables. 
+2. It can be used to describe the probability for a discrete, continuous or mixed variable. 
+3. It is obtained by summing up the probability density function and getting the cumulative probability for a random variable.
+
+** It answers : what percentage of rows in the data have values less than or equal to current row
+
+# those students above 90 percentile
+    select * from (select * ,
+    CUME_DIST() over(order by marks) as 'percentile_score'
+    from marks) t
+    where t.percentile_score > 0.90

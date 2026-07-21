@@ -223,3 +223,62 @@ USE zomato;
     group by f_id) t
     join food t3 on t.f_id = t3.f_id
     order by percent desc
+
+select num2 , lag(num2) over(order by num1 desc),
+    ((num2 - (lag(num2) over(order by num1 desc)))/(lag(num2) over(order by num1 desc))) * 100 as 'pct_ch'
+    from sql_learning.test_frame
+
+USE sql_learning;
+    select *, 
+    percentile_disc(0.5) within group(order by marks) over() as 'median marks' 
+    from marks
+
+USE sql_learning;
+    select *, 
+    percentile_disc(0.75) within group(order by marks) over() as 'median marks' 
+    from marks
+
+USE sql_learning;
+    select *, 
+    percentile_disc(0.5) within group(order by marks) over(partition by branch) as 'median marks' 
+    from marks
+
+USE sql_learning;
+    select *, 
+    percentile_disc(0.5) within group(order by marks) over(partition by branch) as 'median marks disc',
+    percentile_cont(0.5) within group(order by marks) over(partition by branch) as 'median marks cont' 
+    from marks
+
+select *
+    from (select *, 
+    percentile_disc(0.25) within group(order by marks) over() as 'q1',
+    percentile_disc(0.75) within group(order by marks) over() as 'q3',
+    (percentile_disc(0.75) within group(order by marks) over())-(percentile_disc(0.25) within group(order by marks) over()) as "IQR"
+    from marks) t
+    where t.marks > q1-1.5*IQR and t.marks < q3+1.5*IQR
+    order by t.student_id
+
+select *,
+    NTILE(3) over() as 'groups'
+    from marks
+
+select *,
+    NTILE(3) over(order by marks desc) as 'groups'
+    from marks
+
+use sql_learning;
+    select brand_name, model, price,
+    CASE
+        when bucket = 1 then 'budget'
+        when bucket = 2 then 'mid-range'
+        when bucket = 3 then 'premium'
+    END AS 'phone_type'
+
+    from (select brand_name, model, price,
+    NTILE(3) over(order by price) as 'bucket'
+    from smartphones) t
+
+select * from (select * ,
+    CUME_DIST() over(order by marks) as 'percentile_score'
+    from marks) t
+    where t.percentile_score > 0.90
