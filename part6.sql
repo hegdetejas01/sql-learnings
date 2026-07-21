@@ -159,3 +159,67 @@ USE zomato;
     from orders_subquery
     group by monthname(date)
     order by month(date) asc
+
+use sql_learning;
+select * from (select batter, BattingTeam, sum(batsman_run) as 'total' ,
+dense_rank() over(partition by BattingTeam order by total desc) as 'rank_in_team'
+from ipl
+group by BattingTeam, batter) t
+where t.rank_in_team < 6
+order by t.BattingTeam desc, t.rank_in_team asc
+
+use sql_learning;
+    select * from (select 
+    concat("Match-", CAST(row_number() OVER(ORDER BY ID) AS CHAR)) as 'match_num' ,
+    sum(batsman_run) as 'runs_scored',
+    sum(sum(batsman_run)) over(rows between unbounded preceding and current row) as 'career_runs'
+    from ipl 
+    where batter = 'V Kohli'
+    group by ID) t
+    where match_num = 'Match-10' or match_num = 'Match-25' or match_num = 'Match-35'
+
+use sql_learning;
+    select * from (select 
+    concat("Match-", CAST(row_number() OVER(ORDER BY ID) AS CHAR)) as 'match_num' ,
+    sum(batsman_run) as 'runs_scored',
+    sum(sum(batsman_run)) over(rows between unbounded preceding and current row) as 'career_runs',
+    avg(sum(batsman_run)) over(rows between unbounded preceding and current row) as 'avg'
+    from ipl 
+    where batter = 'V Kohli'
+    group by ID) t
+
+use sql_learning;
+        select * from (select 
+        concat("Match-", CAST(row_number() OVER(ORDER BY ID) AS CHAR)) as 'match_num' ,
+        sum(batsman_run) as 'runs_scored',
+        sum(sum(batsman_run)) over w as 'career_runs',
+        avg(sum(batsman_run)) over w as 'career_avg'
+        from ipl
+        where batter = 'V Kohli'
+        group by ID
+        window w as (rows between unbounded preceding and current row)
+        ) t
+
+use sql_learning;
+    select * from (select 
+    concat("Match-", CAST(row_number() OVER(ORDER BY ID) AS CHAR)) as 'match_num' ,
+    sum(batsman_run) as 'runs_scored',
+    sum(sum(batsman_run)) over w as 'career_runs',
+    avg(sum(batsman_run)) over w as 'career_avg',
+    avg(sum(batsman_run)) over (rows between 9 preceding and current row) as '10_match_avg'
+    from ipl
+    where batter = 'V Kohli'
+    group by ID
+    window w as (rows between unbounded preceding and current row)
+    ) t
+
+USE zomato;
+    select t3.f_name,
+    (total_value/sum(total_value) over()) *  100 as 'percent'
+    from (select f_id, sum(amount) as 'total_value' from orders_subquery t1
+    join order_details_subquery t2
+    on t1.order_id = t2.order_id
+    where r_id=1
+    group by f_id) t
+    join food t3 on t.f_id = t3.f_id
+    order by percent desc
