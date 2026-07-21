@@ -180,9 +180,37 @@
     HAVING COUNT(*) > 10
     ORDER BY avg_ram DESC LIMIT 3
 
+
 # avg phone price of all phone brands with avg rating > 70 and number of phones > 10 among all 5g phones
     SELECT brand_name, ROUND(AVG(price)) AS 'avp' 
     FROM sql_learning.smartphones
     WHERE has_5g = 'True'
     GROUP BY brand_name
     HAVING count(*) > 10 AND avg(rating) > 70
+
+Practice
+# Find the top batsman in IPL
+    SELECT batter,SUM(batsman_run) AS 'runs'
+    FROM sql_learning.ipl
+    GROUP BY batter
+    ORDER BY runs DESC LIMIT 5
+
+
+# Find the 2nd highest hitter in IPL
+    SELECT batter,COUNT(*) AS 'num_sixes'
+    FROM sql_learning.ipl
+    WHERE batsman_run = 6
+    GROUP BY batter
+    ORDER BY num_sixes DESC LIMIT 1,1
+    
+
+# Find top 10 batsman with centuries in IPL (Few more topics to be studied to solve this problem)
+    
+
+# Find the top 5 batsman with highest strikes rate who have played a min of 1000 balls
+    SELECT batter, SUM(batsman_run),COUNT(batsman_run)
+    ROUND((SUM(batsman_run)/COUNT(batsman_run)) * 100,2) AS 'sr'
+    FROM sql_learning.ipl
+    GROUP BY batter
+    HAVING COUNT(batsman_run) > 1000
+    ORDER BY sr DESC LIMIT 5
