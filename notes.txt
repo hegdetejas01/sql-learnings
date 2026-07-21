@@ -528,3 +528,36 @@ Sub query is executed first and the result is used for outer statement execution
         SELECT - Where, Select, From, Having,
         UPDATE,
         DELETE.
+
+
+
+
+
+#####################################################################################################
+                                        WINDOW FUNCTIONS
+#####################################################################################################
+
+1. It is similar to group by
+2. It is a type of analystical function performing calculation accross a set of rows that are related to a current row called as window.
+3. It is specified using OVER() clause
+4. Returns the result row wise that is for every row unlike group by which gives result groupwise
+
+
+
+
+########### CONCEPT OF FRAMES ###########
+1. A frame in a window function is a subset of rows within the partition 
+2. It determines the scope of window function calculation.
+3. It is defined using - rows and between
+4. Row specifies - how many rows should it consider in the frame relative to the current row.
+5. Between specifies - boundary of the frame
+
+Eg.
+* Rows between unbounded preceding(1st row) and current row - means frame includes rows from 1st row till the current row 
+# this is the default setting 
+
+* Rows between one preceding and one following - considers one row above and one row below the current row
+
+* Rows between unbounded preceding(1st row) and unbounded following(last row) - considers all rows from first to last
+
+* Rows between 3 preceeding and 2 following - 3 rows before and 2 rows after the current row

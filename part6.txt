@@ -1,0 +1,260 @@
+#####################################################################################################
+                                        WINDOW FUNCTIONS
+#####################################################################################################
+
+
+USE sql_learning;
+SELECT * , AVG(marks) OVER() FROM marks
+
+    - This query displays average marks for all student 
+    - without OVER() , since AVG is an aggregate function, only one row will be displayed(run and check)
+    - OVER() is a window function
+
+
+USE sql_learning;
+SELECT * , AVG(marks) OVER(PARTITION BY branch) FROM marks
+
+    - This query displays the everything with the average marks of their branch for all students
+
+
+USE sql_learning;
+SELECT * , 
+MIN(marks) OVER(),
+MAX(marks) OVER()
+FROM marks
+
+    - shows min of all marks and max marks of all for all students
+
+
+USE sql_learning;
+SELECT * , 
+AVG(marks) OVER(partition by branch),
+MIN(marks) OVER(),
+MAX(marks) OVER()
+FROM marks
+ORDER BY student_id
+
+    - here, the average marks is given branch wise for all students in that branch
+    - min and max data are of entire column irrespective of branch
+
+
+USE sql_learning;
+SELECT * , 
+AVG(marks) OVER(PARTITION BY branch),
+MIN(marks) OVER(PARTITION BY branch),
+MAX(marks) OVER(PARTITION BY branch)
+FROM marks
+ORDER BY student_id
+
+    - AVG, MIN, MAX all are branch wise
+
+
+
+# Find all students who have marks higher than avg marks of their branch
+    USE sql_learning;
+    SELECT * FROM 
+    (SELECT * , AVG(marks) OVER(PARTITION BY branch) AS 'branch_avg' FROM marks) t 
+    WHERE t.marks > t.branch_avg
+
+
+
+
+########## RANK ##########
+
+### RANK - Gives ranking for partition
+* the same rank will be given for equal items Eg. if 2 students have marks 25, both will be ranked 3
+* but since 3 is used 2 times, the next rank will be 5 and not 4 [it considers 3 and 4 are used, but donot display it]
+
+# give rank to students 
+    USE sql_learning;
+    SELECT * , RANK() OVER(ORDER BY marks DESC) FROM marks
+
+    - ranks based on marks
+    - ORDER BY marks DESC : says that rank them based on marks, highest will get 1, lowest will get n
+
+# ranking based on branck by branch
+    USE sql_learning;
+    SELECT * , RANK() OVER(PARTITION BY BRANCH ORDER BY marks DESC) FROM marks
+
+
+
+### DENSE RANK - Gives ranking for partition
+* the same rank will be given for equal items Eg. if 2 students have marks 25, both will be ranked 3
+* here, rank 4 will be given to the next highest marks holder
+* the below code compares both dense and dense_rank
+
+    USE sql_learning;
+    SELECT * , 
+    RANK() OVER(PARTITION BY BRANCH ORDER BY marks DESC),
+    DENSE_RANK() OVER(PARTITION BY BRANCH ORDER BY marks DESC) 
+    FROM marks
+
+
+
+### ROW NUMBER - Gives row number to the entire data
+    USE sql_learning;   
+    SELECT * , 
+    ROW_NUMBER() OVER()
+    FROM marks
+
+    - assigns row number to all data
+
+
+    USE sql_learning;   
+    SELECT * , 
+    ROW_NUMBER() OVER(PARTITION BY BRANCH)
+    FROM marks
+
+    - assigns row branch wise
+
+
+    SELECT * , 
+    CONCAT(branch, '-', ROW_NUMBER() OVER(PARTITION BY BRANCH))
+    FROM marks
+
+    - this gives cse-1, cse-2, ece-1 etc
+
+
+
+# get top 2 customers month wise who spent more money in that month
+
+    USE zomato;
+    WITH rank_month AS (
+        SELECT * FROM (
+            SELECT monthname(date) AS 'month', user_id, SUM(amount) AS 'total',
+            RANK() OVER(PARTITION BY MONTHNAME(date) ORDER BY SUM(amount) DESC) AS 'month_rank'
+            FROM orders_subquery
+            GROUP BY monthname(date), user_id
+            ORDER BY month(date)
+        ) t WHERE t.month_rank < 3)
+
+    SELECT t1.month, t2.user_id, t1.month_rank, t2.name FROM rank_month t1
+    JOIN users_subquery t2 ON t2.user_id = t1.user_id
+
+
+
+
+
+
+##### First Value, Last Value, nth Value ##### 
+* It requires ORDER BY as well
+* CONCEPT of Frames (notes.txt)
+
+# Get the top student in entire collage. This will be displayed in every row
+    USE sql_learning;
+    SELECT *, FIRST_VALUE(name) OVER(ORDER BY marks DESC) FROM marks
+
+    - here i want to display the name, therefore first_value(name)
+    - if i want to display the marks then first_value(marks)
+
+# last_value 
+    USE sql_learning;
+    SELECT *, LAST_VALUE(name) OVER(ORDER BY marks DESC) FROM marks 
+
+    - this query doesn't give expected result
+    - CONCEPT of Frames
+    - use unbounded following and unbounded preceding type to get expected answer as below
+
+    USE sql_learning;
+    SELECT *, LAST_VALUE(marks) 
+    OVER(
+        ORDER BY marks DESC 
+        ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING
+    ) 
+    FROM marks 
+
+    # getting the marks last_value branch wise
+        USE sql_learning;
+        SELECT *, LAST_VALUE(name) 
+        OVER(
+            PARTITION BY branch
+            ORDER BY marks DESC 
+            ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING
+        ) as 'min_branchwise_marks'
+        FROM marks 
+
+    # getting the marks first_value branch wise
+        USE sql_learning;
+        SELECT *, FIRST_VALUE(name) 
+        OVER(
+            PARTITION BY branch
+            ORDER BY marks DESC 
+            ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING
+        ) as 'min_branchwise_marks'
+        FROM marks
+
+# nth value 
+* It takes 2 parameter - what to display, which item to display(1st item, 2nd topper etc)
+
+    # name of 2nd topper in each branch
+        USE sql_learning;
+        SELECT *, NTH_VALUE(name, 2) 
+        OVER(
+            PARTITION BY branch
+            ORDER BY marks DESC 
+            ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING
+        ) as 'min_branchwise_marks'
+        FROM marks
+
+
+
+
+
+#### PRACTICE
+# get the topper name, branch name and marks for each branch
+    USE sql_learning;
+    select name, branch, marks from ( 
+        select *, first_value(name) 
+	    over(partition by branch order by marks desc) as 'topper_name',
+        first_value(marks) 
+        over(partition by branch order by marks desc) as 'topper_marks'
+    from marks) t
+    where t.name = t.topper_name and t.marks = t.topper_marks
+
+# last rank scorer of each branch
+    USE sql_learning;
+    select name, branch, marks from (
+        select *, last_value(name) 
+        over(partition by branch order by marks desc 
+                ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING) as 'topper_name',
+        last_value(marks) 
+        over(partition by branch order by marks desc
+                ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING) as 'topper_marks'
+    from marks) t
+    where t.name = t.topper_name and t.marks = t.topper_marks
+
+
+
+
+############## LEAD and LAG functions ##############
+
+LAG - gives the previous row value
+    USE sql_learning;
+    select *, 
+    lag(marks) over(order by student_id) 
+    from marks
+
+LEAD - gives the next row value
+    USE sql_learning;
+    select *, 
+    lag(marks) over(order by student_id),
+    lead(marks) over(order by student_id)
+    from marks
+
+
+# PARTITION BY branch
+    USE sql_learning;
+    select *, 
+    lag(marks) over(partition by branch order by student_id),
+    lead(marks) over(partition by branch order by student_id)
+    from marks
+
+
+# get the month on month revenue growth from zomato data
+    USE zomato;
+    select monthname(date), sum(amount), 
+    (sum(amount) - lag(sum(amount)) over(order by month(date) asc))/
+    lag(sum(amount)) over(order by month(date) asc) * 100 as 'MoM revenue'
+    from orders_subquery
+    group by monthname(date)
+    order by month(date) asc
