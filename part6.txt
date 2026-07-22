@@ -18,6 +18,13 @@ SELECT * , AVG(marks) OVER(PARTITION BY branch) FROM marks
 
 
 USE sql_learning;
+SELECT branch, AVG(marks) FROM marks
+GROUP BY branch
+
+     - This query groups and gives one result for each group
+
+
+USE sql_learning;
 SELECT * , 
 MIN(marks) OVER(),
 MAX(marks) OVER()
@@ -50,7 +57,7 @@ ORDER BY student_id
 
 
 
-# Find all students who have marks higher than avg marks of their branch
+# Find all students who have marks higher than avg marks of their branch (we had solved same type of problem using corelated query, we should 
     USE sql_learning;
     SELECT * FROM 
     (SELECT * , AVG(marks) OVER(PARTITION BY branch) AS 'branch_avg' FROM marks) t 
@@ -70,7 +77,7 @@ ORDER BY student_id
     SELECT * , RANK() OVER(ORDER BY marks DESC) FROM marks
 
     - ranks based on marks
-    - ORDER BY marks DESC : says that rank them based on marks, highest will get 1, lowest will get n
+    - ORDER BY marks DESC : says that rank them based on marks, highest will get 1, lowest will get 
 
 # ranking based on branck by branch
     USE sql_learning;
@@ -116,7 +123,7 @@ ORDER BY student_id
 
 
 
-# get top 2 customers month wise who spent more money in that month
+# get top 2 customers month wise who spent more money in that month / Find top 2 most paying customers of each month
 
     USE zomato;
     WITH rank_month AS (
