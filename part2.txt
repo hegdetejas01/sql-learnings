@@ -1,5 +1,5 @@
 #####################################################################################################
-                                DATA MANIPULATION LANGUAGE 
+                                DATA MANIPULATION LANGUAGE                                          
 #####################################################################################################
 
 
@@ -33,6 +33,7 @@ CREATE TABLE users(
     ( NULL, 'raja', 'raja@gmail.com', '1234' ),
     ( NULL, 'rani', 'rani@gmail.com', '1234' ),
     ( NULL, 'rorror', 'rorror@gmail.com', '1234' )
+    ( NULL, 'rocket', 'rocket@gmail.com', '1234' )
 
 
 
@@ -60,7 +61,7 @@ CREATE TABLE users(
     Eg: Squaring resolution width 
     SELECT model, resolution_width*resolution_width FROM sql_learning.smartphones
 
-    Eg: Eg: Squaring resolution height adding it to square of resolution width 
+    Eg: Squaring resolution height adding it to square of resolution width 
     SELECT model, resolution_width*resolution_width + resolution_height*resolution_height 
     FROM sql_learning.smartphones
 
@@ -175,11 +176,9 @@ changing values based on some criteria
 # delete all phones whose price > 2L
     DELETE FROM sql_learning.smartphones WHERE price>200000
 
-# deleting based on multiple consitions - primary camere > 150 and which are of samsung
+# deleting based on multiple conditions - primary camere > 150 and which are of samsung
     DELETE FROM sql_learning.smartphones
     WHERE brand_name = 'samsung' AND primary_camera_rear > 150
-
-
 
 
 

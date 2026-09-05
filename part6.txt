@@ -57,7 +57,7 @@ ORDER BY student_id
 
 
 
-# Find all students who have marks higher than avg marks of their branch (we had solved same type of problem using corelated query, we should 
+# Find all students who have marks higher than avg marks of their branch (we had solved same type of problem using corelated query)
     USE sql_learning;
     SELECT * FROM 
     (SELECT * , AVG(marks) OVER(PARTITION BY branch) AS 'branch_avg' FROM marks) t 

@@ -524,7 +524,7 @@ Sub query is executed first and the result is used for outer statement execution
 
 # Where can subqueries be used?
     It can be used with 
-        INSERT, 
+        INSERT,
         SELECT - Where, Select, From, Having,
         UPDATE,
         DELETE.

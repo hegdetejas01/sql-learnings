@@ -269,13 +269,3 @@ SET money =
         SELECT user_id FROM users_subquery
         WHERE user_id NOT IN (
             SELECT DISTINCT(user_id) FROM orders_subquery))
-
-
-
-
-
-
-
-
-
-
