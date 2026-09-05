@@ -33,6 +33,7 @@ DDL Commands for Tables
 
 
 ############# CONSTRAINTS #############
+NOT NULL, UNIQUE, PRIMARY KEY, AUTO INCREMENT, CHECK, DEFAULT, FOREIGN KEY
 
 1. NOT NULL     # Making id, name, password as NOT NULL
 

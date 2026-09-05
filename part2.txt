@@ -110,10 +110,10 @@ Query execution order - infytq - FROM, JOIN, WHERE, GROUP BY, HAVING, SELECT, DI
 #####
 10. Between operator - gives data between a given range
 
-    # Using WHERE phone between price 20000 and 30000
+    # Using WHERE phone between price 20000 and 30000 (This doesn't include 20000 and 30000)
     SELECT * FROM sql_learning.smartphones WHERE price > 20000 AND price < 30000
 
-    # Using BETWEEN - This is same as above line of code
+    # Using BETWEEN - This is same as above line of code - Not exactly same - This includes 20000 and 30000
     SELECT * FROM sql_learning.smartphones WHERE price BETWEEN 20000 AND 30000
 
 
